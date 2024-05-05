@@ -3,7 +3,9 @@ const express = require('express');
 const router = express.Router();
 const zod = require("zod");
 const { Admin, Employee } = require("./db");
-
+const  adminMiddleware  = require("./middleware");
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("./config");
 
 router.get('/', (req, res) => {
     res.send('Welcome to the Home Page!');
@@ -17,7 +19,13 @@ router.post("/admin/signin", async (req,res)=>{
         if (!admin) {
             return res.status(404).send('Admin not found');
         }
-        res.send('Admin signed in successfully');
+        if (admin.password !== password) {
+            return res.status(401).send('Invalid credentials'); // Generic error message
+        }
+        const token = jwt.sign({username}, JWT_SECRET);
+        res.send({message:'Admin signed in successfully', 
+                  token:token, 
+                  username: username});
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
@@ -46,14 +54,14 @@ router.post('/admin/signup', async (req, res) => {
     }
 });
 
-router.get('/employees', async (req, res) =>{
+router.get('/employees', adminMiddleware, async (req, res) =>{
     const employees = await Employee.find({})
     res.json({
         employees: employees
     })
 })
 
-router.post('/employees', async (req, res) => {
+router.post('/employees', adminMiddleware, async (req, res) => {
     try {
         const { name, email, mobile, designation, gender, course } = req.body;
         const newEmployee = await Employee.create({
@@ -72,7 +80,7 @@ router.post('/employees', async (req, res) => {
     }
 });
 
-router.put('/employees', async (req, res) => {
+router.put('/employees', adminMiddleware,async (req, res) => {
     try {
         const { id, name, email, mobile, designation, gender, course } = req.body;
         const updateResult = await Employee.updateOne({ _id: id }, {
@@ -92,7 +100,7 @@ router.put('/employees', async (req, res) => {
     }
 });
 
-router.delete('/employees', async (req, res) => {
+router.delete('/employees', adminMiddleware,async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
