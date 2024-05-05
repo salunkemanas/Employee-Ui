@@ -74,14 +74,15 @@ router.post('/employees', async (req, res) => {
 
 router.put('/employees', async (req, res) => {
     try {
-        const { name, email, mobile, designation, gender, course } = req.body;
-        const updateResult = await Employee.updateOne({ email: email }, {
+        const { id, name, email, mobile, designation, gender, course } = req.body;
+        const updateResult = await Employee.updateOne({ _id: id }, {
             $set: {
                 name: name,
                 mobile: mobile,
                 designation: designation,
                 gender: gender,
-                course: course
+                course: course,
+                email: email,
             }
         },)
         res.status(201).send('Employee edited successfully')
