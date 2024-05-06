@@ -63,7 +63,7 @@ router.get('/employees', adminMiddleware, async (req, res) =>{
 
 router.post('/employees', adminMiddleware, async (req, res) => {
     try {
-        const { name, email, mobile, designation, gender, course } = req.body;
+        const { name, email, mobile, designation, gender, course, image } = req.body;
         const newEmployee = await Employee.create({
             
             name,
@@ -71,7 +71,8 @@ router.post('/employees', adminMiddleware, async (req, res) => {
             mobile,
             designation,
             gender,
-            course
+            course,
+            image
         });
         res.status(201).send('Employee created successfully');
     } catch (error) {
@@ -90,7 +91,7 @@ router.put('/employees', adminMiddleware,async (req, res) => {
                 designation: designation,
                 gender: gender,
                 course: course,
-                email: email,
+                email: email
             }
         },)
         res.status(201).send('Employee edited successfully')
@@ -120,5 +121,14 @@ router.delete('/employees', adminMiddleware,async (req, res) => {
         res.status(500).send('Server error during employee deletion');
     }
 });
+
+// router.get("/images",async (req,res)=>{
+//     try {
+//         const images = await Image.find({});
+//         res.json({images: images});
+//     } catch (error) {
+//         res.json({message:error})
+//     }    
+// })
 
 module.exports = router;

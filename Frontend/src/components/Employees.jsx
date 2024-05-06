@@ -45,6 +45,20 @@ const Employees = () => {
                 return <span>{row.index + 1}</span>;
               }
             },
+            {
+              Header:"Image",
+              accessor:"image",
+              Cell: ({ row }) => {
+                return <img src={row.original.image} style={{
+                  width: '100%',  
+                  height: '100%',  
+                  maxWidth: '100px',  
+                  maxHeight: '100px',  
+                  display: 'block',  
+                  //margin: '0 auto'  
+                }}/>;
+              }
+            },
         {
           Header: "Name",
           accessor: "name",

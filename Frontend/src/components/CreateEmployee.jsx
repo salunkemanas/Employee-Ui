@@ -9,8 +9,22 @@ const CreateEmployee = () => {
     const [designation, setDesignation] = useState('')
     const [gender, setGender] = useState('')
     const [course, setCourse] = useState('')
+    const [image, setImage] = useState('')
+    
 
     const navigate = useNavigate();
+
+    function handleImageChange(e){
+      var reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onload = () =>{
+        console.log(reader.result);
+        setImage(reader.result);
+      };
+      reader.onerror = (error)=> {
+        console.log("Error: ", error);
+      } 
+    }
 
     const handleCheckboxChange = (event) => {
         const { value, checked } = event.target;
@@ -26,7 +40,7 @@ const CreateEmployee = () => {
     };
     async function handleCreateEmployee(){
         try {
-            const res = await axios.post("http://localhost:3000/employees", {name,email,mobile, designation, gender, course},{headers: {
+            const res = await axios.post("http://localhost:3000/employees", {name,email,mobile, designation, gender, course, image},{headers: {
               'Authorization': `Bearer ${localStorage.getItem('token')}`
           }})
             console.log(res)
@@ -38,102 +52,7 @@ const CreateEmployee = () => {
     }
 
   return (
-    // <>
-
-    // <label htmlFor="name">Name:</label>
-    // <input
-    //   type="text"
-    //   id="name"
-    //   value={name}
-    //   onChange={(e) => setName(e.target.value)}
-    //   required
-    // /><br/>
-    // <label htmlFor="email">Email:</label>
-    // <input
-    // type="text"
-    // id="email"
-    // value={email}
-    // onChange={(e) => setEmail(e.target.value)}
-    // required
-    // /><br/>
-    // <label htmlFor="mobile">Mobile No:</label>
-    // <input
-    // type="text"
-    // id="mobile"
-    // value={mobile}
-    // onChange={(e) => setMobile(e.target.value)}
-    // required
-    // /><br/>
-    // <label htmlFor="designation">Designation:</label>
-    // <select
-    //     id="designation"
-    //     value={designation}
-    //     onChange={(e) => setDesignation(e.target.value)}
-    //     required
-    // >
-    //     <option value="">Select a designation</option>
-    //     <option value="HR">HR</option>
-    //     <option value="Manager">Manager</option>
-    //     <option value="Sales">Sales</option>
-    // </select><br />
-    // {/* <label htmlFor="gender">Gender:</label>
-    // <input
-    // type="text"
-    // id="gender"
-    // value={gender}
-    // onChange={(e) => setGender(e.target.value)}
-    // required
-    // /><br/> */}
-    // <label htmlFor="gender">Gender:</label><br />
-    //         <input
-    //             type="radio"
-    //             id="male"
-    //             name="gender"
-    //             value="Male"
-    //             checked={gender === 'Male'}
-    //             onChange={(e) => setGender(e.target.value)}
-    //         />
-    //         <label htmlFor="male">Male</label><br />
-
-    //         <input
-    //             type="radio"
-    //             id="female"
-    //             name="gender"
-    //             value="Female"
-    //             checked={gender === 'Female'}
-    //             onChange={(e) => setGender(e.target.value)}
-    //         />
-    //         <label htmlFor="female">Female</label><br />
-    // <label htmlFor="course">Course:</label><br/>
-    //         <input
-    //             type="checkbox"
-    //             id="course-item1"
-    //             value="MCA"
-    //             checked={course.includes('MCA')}
-    //             onChange={handleCheckboxChange}
-    //         />
-    //         <label htmlFor="course-item1">MCA</label><br/>
-
-    //         <input
-    //             type="checkbox"
-    //             id="course-item2"
-    //             value="BCA"
-    //             checked={course.includes('BCA')}
-    //             onChange={handleCheckboxChange}
-    //         />
-    //         <label htmlFor="course-item2">BCA</label><br/>
-
-    //         <input
-    //             type="checkbox"
-    //             id="course-item3"
-    //             value="BSC"
-    //             checked={course.includes('BSC')}
-    //             onChange={handleCheckboxChange}
-    //         />
-    //         <label htmlFor="course-item3">BSC</label><br/>
-    // <button onClick={handleCreateEmployee}>Submit</button>
-    // <br />
-    // </>
+    
     <>
     <div className="max-w-md mx-auto mt-10">
       <div className="mb-6">
@@ -247,6 +166,17 @@ const CreateEmployee = () => {
           <label htmlFor="course-item3" className="ml-2 text-sm font-medium text-gray-900">BSC</label>
         </div>
       </fieldset>
+      <div className="mb-6">
+        <label htmlFor="image" className="block mb-2 text-sm font-medium text-gray-900">Upload Image:</label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*" // Accept only image files
+            onChange={handleImageChange}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+        <img src={image} alt="Preview" className="mt-4 w-full rounded-lg" />
+    </div>
       <button
         onClick={handleCreateEmployee}
         className="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"

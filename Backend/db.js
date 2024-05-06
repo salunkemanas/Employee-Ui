@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb+srv://123cactusjuice:YVwRE8Fcd3Iiutjd@cluster0.gfnwyso.mongodb.net/Assignment")
+mongoose.connect("mongodb+srv://123cactusjuice:YVwRE8Fcd3Iiutjd@cluster0.gfnwyso.mongodb.net/Assignment1")
 // Create a Schema for Users
 const adminSchema = new mongoose.Schema({
     username: {
@@ -42,6 +42,9 @@ const employeeSchema = new mongoose.Schema({
     course: { 
         type: [String], 
         required: true 
+    },
+    image: {
+        type: String,
     },
     createDate: { 
         type: Date, 
